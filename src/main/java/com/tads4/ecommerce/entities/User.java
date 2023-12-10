@@ -2,32 +2,41 @@ package com.tads4.ecommerce.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 @Entity
 @Table(name = "tb_user")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
 
-    private  String name;
+    private String name;
 
-    private  String email;
+    @Column(unique = true)
+    private String email;
 
     private String phone;
 
-    private String birthdate;
+    private String birthDate;
 
     private String password;
+
+    @OneToMany(mappedBy = "client")
+    private final List<Order> orders = new ArrayList<>();
 
     public User() {
     }
 
-    public User(Long id, String name, String email, String phone, String birthdate, String password) {
+    public User(Long id, String name, String email, String phone, String birthDate, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.birthdate = birthdate;
+        this.birthDate = birthDate;
         this.password = password;
     }
 
@@ -63,12 +72,12 @@ public class User {
         this.phone = phone;
     }
 
-    public String getBirthdate() {
-        return birthdate;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getPassword() {
@@ -77,5 +86,34 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(phone, user.phone) && Objects.equals(birthDate, user.birthDate) && Objects.equals(password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, email, phone, birthDate, password);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", birthday='" + birthDate + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
